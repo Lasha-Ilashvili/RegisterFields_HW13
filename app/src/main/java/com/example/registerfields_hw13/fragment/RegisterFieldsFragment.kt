@@ -26,6 +26,12 @@ class RegisterFieldsFragment : Fragment() {
 
     private val fieldViewModel: FieldViewModel by viewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        fields = getData()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,9 +42,6 @@ class RegisterFieldsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        fields = getData()
 
         setUpRecycler()
 
