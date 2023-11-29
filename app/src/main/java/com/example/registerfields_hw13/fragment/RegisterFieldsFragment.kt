@@ -26,6 +26,8 @@ class RegisterFieldsFragment : Fragment() {
 
     private val fieldViewModel: FieldViewModel by viewModels()
 
+    private val enteredValues: MutableMap<Int, String> = mutableMapOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,11 +68,25 @@ class RegisterFieldsFragment : Fragment() {
         val configurations: List<List<Field>> =
             gson.fromJson(json, object : TypeToken<List<List<Field>>>() {}.type)
 
-        return configurations.flatten()
+        val flattenedList = configurations.flatten()
+
+        for (field in flattenedList) {
+            fieldViewModel.setFieldValue(field.id, "")
+        }
+
+        return flattenedList
     }
 
     private fun register() {
-
+        for (field in fields) {
+            val enteredValue = fieldViewModel.getFieldValue(field.id)
+            if (field.required && enteredValue.isEmpty()) {
+                showToast("${field.hint} is required.")
+                return
+            } else {
+                enteredValues[field.id] = enteredValue
+            }
+        }
     }
 
     private fun showToast(message: String) {
