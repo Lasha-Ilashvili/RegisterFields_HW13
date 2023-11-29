@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/register_nav_graph"
+    app:startDestination="@id/registerFieldsFragment">
+
+    <fragment
+        android:id="@+id/registerFieldsFragment"
+        android:name="com.example.registerfields_hw13.fragment.RegisterFieldsFragment"
+        android:label="fragment_register_fields"
+        tools:layout="@layout/fragment_register_fields" />
+</navigation>
