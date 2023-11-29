@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.registerfields_hw13.Field
 import com.example.registerfields_hw13.adapter.FieldAdapter
 import com.example.registerfields_hw13.databinding.FragmentRegisterFieldsBinding
 import com.example.registerfields_hw13.json_reader.getJsonDataFromAsset
+import com.example.registerfields_hw13.view_model.FieldViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -21,6 +23,8 @@ class RegisterFieldsFragment : Fragment() {
     private lateinit var fields: List<Field>
 
     private lateinit var adapter: FieldAdapter
+
+    private val fieldViewModel: FieldViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
