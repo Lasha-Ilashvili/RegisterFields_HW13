@@ -9,5 +9,18 @@
         android:id="@+id/registerFieldsFragment"
         android:name="com.example.registerfields_hw13.fragment.RegisterFieldsFragment"
         android:label="fragment_register_fields"
-        tools:layout="@layout/fragment_register_fields" />
+        tools:layout="@layout/fragment_register_fields">
+        <action
+            android:id="@+id/action_registerFieldsFragment_to_registeredFieldsFragment"
+            app:destination="@id/registeredFieldsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registeredFieldsFragment"
+        android:name="com.example.registerfields_hw13.fragment.RegisteredFieldsFragment"
+        android:label="fragment_registered_fields"
+        tools:layout="@layout/fragment_registered_fields">
+        <argument
+            android:name="idList"
+            app:argType="integer[]" />
+    </fragment>
 </navigation>

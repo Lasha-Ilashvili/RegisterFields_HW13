@@ -3,11 +3,12 @@ package com.example.registerfields_hw13.adapter
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.registerfields_hw13.Field
 import com.example.registerfields_hw13.databinding.FieldItemBinding
+import com.example.registerfields_hw13.model.Field
 
 class FieldAdapter : ListAdapter<Field, FieldAdapter.FieldViewHolder>(FieldDiffUtil) {
 
@@ -20,6 +21,8 @@ class FieldAdapter : ListAdapter<Field, FieldAdapter.FieldViewHolder>(FieldDiffU
             return oldItem == newItem
         }
     }
+
+    var itemOnType: ((Int, String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FieldViewHolder {
         return FieldViewHolder(
@@ -38,14 +41,18 @@ class FieldAdapter : ListAdapter<Field, FieldAdapter.FieldViewHolder>(FieldDiffU
     inner class FieldViewHolder(private val binding: FieldItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.edField.doOnTextChanged { input, _, _, _ ->
+                itemOnType?.invoke(adapterPosition, input.toString())
+            }
+        }
+
         fun bind() {
             val field = currentList[adapterPosition]
 
-            with(binding) {
-                edField.apply {
-                    hint = field.hint
-                    inputType = getInputType(field.keyboard)
-                }
+            binding.edField.apply {
+                hint = field.hint
+                inputType = getInputType(field.keyboard)
             }
         }
 

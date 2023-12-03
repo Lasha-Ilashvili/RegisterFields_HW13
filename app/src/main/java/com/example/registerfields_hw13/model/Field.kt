@@ -1,11 +1,13 @@
 package com.example.registerfields_hw13.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Field(
-    val field_id: Int,
+    @SerializedName("field_id") val id: Int,
     val hint: String,
-    val field_type: String,
-    val keyboard: String,
+    @SerializedName("field_type") val type: String,
+    val keyboard: String?,
     val required: Boolean,
-    val is_active: Boolean,
+    @SerializedName("is_active") val isActive: Boolean,
     val icon: String
 )
