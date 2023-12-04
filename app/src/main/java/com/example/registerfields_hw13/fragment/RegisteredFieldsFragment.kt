@@ -1,33 +1,24 @@
 package com.example.registerfields_hw13.fragment
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.registerfields_hw13.adapter.RegisteredFieldAdapter
+import com.example.registerfields_hw13.base.BaseFragment
 import com.example.registerfields_hw13.databinding.FragmentRegisteredFieldsBinding
 import com.example.registerfields_hw13.view_model.FieldViewModel
 
-class RegisteredFieldsFragment : Fragment() {
+class RegisteredFieldsFragment :
+    BaseFragment<FragmentRegisteredFieldsBinding>(FragmentRegisteredFieldsBinding::inflate) {
 
     private val fieldViewModel: FieldViewModel by activityViewModels()
 
     private val args: RegisteredFieldsFragmentArgs by navArgs()
 
-    private var _binding: FragmentRegisteredFieldsBinding? = null
-    private val binding get() = _binding!!
-
     private lateinit var adapter: RegisteredFieldAdapter
 
     private lateinit var result: List<Pair<String, String>>
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun setData() {
         result = getList()
     }
 
@@ -38,21 +29,8 @@ class RegisteredFieldsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentRegisteredFieldsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setUpRecycler()
-    }
-
-    private fun setUpRecycler() {
+    override fun setRecycler() {
         adapter = RegisteredFieldAdapter().apply {
             fieldList = result
         }
