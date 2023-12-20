@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken
 class RegisterFieldsFragment :
     BaseFragment<FragmentRegisterFieldsBinding>(FragmentRegisterFieldsBinding::inflate) {
 
-    private lateinit var fields: List<Field>
+    private lateinit var fields: List<List<Field>>
 
     private lateinit var adapter: FieldAdapter
 
@@ -25,26 +25,22 @@ class RegisterFieldsFragment :
         fields = getData()
     }
 
-    private fun getData(): List<Field> {
+    private fun getData(): List<List<Field>> {
         val json = getJsonDataFromAsset(requireContext(), "fields.json")
 
-        val configurations: List<List<Field>> =
-            Gson().fromJson(json, object : TypeToken<List<List<Field>>>() {}.type)
-
-        return configurations.flatten()
+        return Gson().fromJson(json, object : TypeToken<List<List<Field>>>() {}.type)
     }
 
 
     override fun setRecycler() {
-        adapter = FieldAdapter().apply {
-            itemOnType = ::addFieldValues
-            submitList(fields)
+        binding.rvFields.adapter = FieldAdapter().apply {
+            itemSave = ::addFieldValues
+            setFieldData(fields)
         }
-        binding.rvFields.adapter = adapter
     }
 
-    private fun addFieldValues(position: Int, input: String) {
-        val field = fields[position]
+    private fun addFieldValues(position: Int, innerPosition: Int, input: String) {
+        val field = fields[position][innerPosition]
         fieldViewModel.setFieldValue(field.id, Pair(field, input))
     }
 
@@ -67,7 +63,6 @@ class RegisterFieldsFragment :
 
             if (input.isNotEmpty()) {
                 fieldIdList.add(key)
-
             }
 
         }

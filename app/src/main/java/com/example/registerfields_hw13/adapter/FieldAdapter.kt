@@ -1,32 +1,20 @@
 package com.example.registerfields_hw13.adapter
 
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.registerfields_hw13.databinding.FieldItemBinding
+import com.example.registerfields_hw13.databinding.InnerRegisterFieldsBinding
 import com.example.registerfields_hw13.model.Field
 
-class FieldAdapter : ListAdapter<Field, FieldAdapter.FieldViewHolder>(FieldDiffUtil) {
+class FieldAdapter : RecyclerView.Adapter<FieldAdapter.FieldViewHolder>() {
 
-    object FieldDiffUtil : DiffUtil.ItemCallback<Field>() {
-        override fun areItemsTheSame(oldItem: Field, newItem: Field): Boolean {
-            return oldItem.id == newItem.id
-        }
+    var itemSave: ((Int, Int, String) -> Unit)? = null
 
-        override fun areContentsTheSame(oldItem: Field, newItem: Field): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    var itemOnType: ((Int, String) -> Unit)? = null
+    private lateinit var currentList: List<List<Field>>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FieldViewHolder {
         return FieldViewHolder(
-            FieldItemBinding.inflate(
+            InnerRegisterFieldsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -34,35 +22,28 @@ class FieldAdapter : ListAdapter<Field, FieldAdapter.FieldViewHolder>(FieldDiffU
         )
     }
 
+    override fun getItemCount(): Int = currentList.size
+
+    fun setFieldData(newList: List<List<Field>>) {
+        currentList = newList
+    }
+
     override fun onBindViewHolder(holder: FieldViewHolder, position: Int) {
         holder.bind()
     }
 
-    inner class FieldViewHolder(private val binding: FieldItemBinding) :
+    inner class FieldViewHolder(private val binding: InnerRegisterFieldsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.edField.doOnTextChanged { input, _, _, _ ->
-                itemOnType?.invoke(adapterPosition, input.toString())
-            }
-        }
 
         fun bind() {
-            val field = currentList[adapterPosition]
+            val fields = currentList[adapterPosition]
+            binding.rvInnerFields.adapter = InnerFieldAdapter().apply {
+                itemOnType = { position, input ->
+                    itemSave?.invoke(adapterPosition, position, input)
+                }
 
-            binding.edField.apply {
-                hint = field.hint
-                inputType = getInputType(field.keyboard)
-            }
-        }
-
-
-        private fun getInputType(keyboard: String?): Int {
-            return when (keyboard) {
-                "text" -> InputType.TYPE_CLASS_TEXT
-                "number" -> InputType.TYPE_CLASS_NUMBER
-
-                else -> InputType.TYPE_CLASS_TEXT
+                setInnerFieldData(fields)
             }
         }
     }
